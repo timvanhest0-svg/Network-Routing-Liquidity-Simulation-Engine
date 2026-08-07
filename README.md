@@ -1,143 +1,106 @@
-# Network Routing Liquidity Risk Simulation Engine
+# Network Routing Liquidity Engine
 
-> A modular Streamlit research application for mean-reverting network topology, network-adjusted routing capacity, performance-controlled early-warning signals, and five-strategy liquidity-support comparison.
+> A reproducible Streamlit research application for examining how financial-network structure affects liquidity routing under stress and how alternative intervention strategies change simulated outcomes.
 
 ![Python](https://img.shields.io/badge/python-3.10%2B-blue)
 ![Streamlit](https://img.shields.io/badge/built%20with-Streamlit-ff4b4b)
 ![License](https://img.shields.io/badge/license-Apache--2.0-green)
-![Tests](https://img.shields.io/badge/tests-pytest-brightgreen)
 ![Status](https://img.shields.io/badge/status-research--prototype-orange)
 
-## Objective
+## Purpose
 
-A financial system is not resilient merely because liquidity exists somewhere in the system. Liquidity must also be capable of reaching the institutions and markets where pressure is concentrated.
+Financial resilience depends not only on how much liquidity institutions hold,
+but also on whether the financial network can route that liquidity to the parts
+of the system where pressure is concentrated.
 
-The engine is a controlled policy laboratory based on the network view developed in the thesis *Network behavior and liquidity crises*. It separates:
+The Network Routing Liquidity Engine is a controlled policy laboratory based on
+the network perspective developed in the thesis *Network behavior and liquidity
+crises*. It distinguishes between:
 
-- **Balance-sheet capacity:** how much liquidity institutions can supply.
-- **Routing capacity:** how effectively the network can move liquidity through intermediation links.
+- **balance-sheet capacity**, the liquidity institutions can supply; and
+- **routing capacity**, the ability of the network to transmit that liquidity
+  through direct and indirect intermediation links.
 
-The engine isolates the routing side. It does not forecast a specific crisis. It evaluates how network topology, warning quality, intervention timing, buffer release, and central-bank support affect simulated liquidity shortfalls.
+The engine focuses on routing capacity. It does not forecast a particular crisis
+or reconstruct an observed institution-level network. Instead, it provides a
+transparent environment for studying how network structure, warning quality,
+intervention timing, liquidity buffers, and central-bank support influence
+simulated liquidity shortfalls.
 
 ## Key features
 
-- **Positive mean-reverting tail exponent:** the engine simulates \(x_t=\log(\gamma_t)\) and transforms back with \(\gamma_t=\exp(x_t)\).
-- **Intuitive gamma inputs:** users enter the desired arithmetic mean, standard deviation, and memory half-life on the original gamma scale. The engine converts them internally to log-gamma parameters.
-- **Network-adjusted routing capacity:** daily gamma values determine direct and indirect liquidity multipliers through a power-law degree distribution.
-- **Performance-controlled EWI:** recall, precision, and lead time are explicit scenario inputs. Target and achieved performance are reported separately.
-- **Two support channels:** dynamic buffer release and central-bank injection enter as additive liquidity support.
-- **Five policy strategies:** no intervention, reactive countercyclical support, EWI-targeted support, randomized equal-volume timing, and a perfect-information equal-volume oracle.
-- **Reproducible simulation:** fixed seeds control topology paths, warning placement, and randomized benchmarks.
-- **Exportable results:** figures and multi-sheet Excel outputs can be downloaded from the application.
+- **Mean-reverting network topology:** simulates a positive, time-varying tail
+  exponent that controls the implied degree distribution.
+- **Network-adjusted liquidity:** maps each simulated network state into direct
+  and indirect routing multipliers.
+- **Configurable liquidity risk:** identifies risk days from the lower tail of
+  baseline direct routing capacity.
+- **Performance-controlled EWI:** reports configured and realized recall,
+  precision, lead time, and signal counts separately.
+- **Two support channels:** combines dynamic buffer release and central-bank
+  liquidity injection.
+- **Five policy strategies:** compares no intervention, reactive
+  countercyclical support, EWI-targeted support, randomized timing, and a
+  perfect-information oracle.
+- **Reproducible execution:** uses explicit configuration objects and fixed
+  random seeds.
+- **Auditable outputs:** exports figures, tables, settings, diagnostics, and the
+  parameters used to generate the results.
 
-## Main pages
+## Application pages
 
-0. **Overview**: model purpose, thesis link, and interpretation.
-1. **Network simulation and routing paths**: topology settings, multiplier relationship, and simulated paths.
-2. **Risk metrics and EWI design**: baseline risk metrics, EWI controls, target-versus-achieved diagnostics, and signal counts.
-3. **Mitigation comparison**: five-strategy policy table and comparison figure.
-4. **Definitions**: model glossary.
-5. **Downloads**: figures, settings, diagnostics, and result tables.
+1. **Overview** explains the policy question, model scope, and configuration.
+2. **Network simulation and routing paths** presents simulated network states,
+   multiplier distributions, and individual and ensemble paths.
+3. **Risk metrics and EWI settings** reports baseline risk outcomes and the
+   realized performance of the warning signal.
+4. **Mitigation results** compares the five policy strategies.
+5. **Model definitions** provides a glossary of the main concepts.
+6. **Downloads** exports figures, settings, diagnostics, and result tables.
 
-## Model summary
+## Policy comparison
 
-### 1. Log-gamma topology process
+The comparison is designed to separate intervention timing from intervention
+volume:
 
-The engine asks users for gamma-scale inputs:
+- **No intervention** provides the baseline.
+- **Reactive countercyclical intervention** responds after a realized risk day.
+- **EWI-targeted intervention** responds to an imperfect advance-warning signal.
+- **Randomized timing** reallocates the EWI strategy's realized support-day
+  budget to random dates.
+- **Perfect-information oracle** allocates the same support-day budget to the
+  weakest baseline observations using information that would not be available
+  in practice.
 
-- `mu`: desired stationary arithmetic mean of gamma;
-- `sigma`: desired stationary standard deviation of gamma;
-- `halftime`: assumed half-life of a topology shock in trading days.
+Randomized timing and the oracle are equal-volume timing controls. The reactive
+countercyclical strategy is event-driven and may therefore use a different
+realized support volume. The comparison reports both risk outcomes and support
+volume so these differences remain visible.
 
-These are converted to log-gamma parameters:
-
-\[
-\sigma_x^2=\log\left(1+\frac{\sigma_\gamma^2}{\mu_\gamma^2}\right),
-\qquad
-\mu_x=\log(\mu_\gamma)-\frac{1}{2}\sigma_x^2.
-\]
-
-Log-gamma follows:
-
-\[
-x_t=\mu_x+\rho(x_{t-1}-\mu_x)+\sigma_{\eta,x}\varepsilon_t,
-\qquad \varepsilon_t\sim N(0,1),
-\]
-
-with:
-
-\[
-\rho=0.5^{1/\text{halftime}},
-\qquad
-\sigma_{\eta,x}=\sigma_x\sqrt{1-\rho^2}.
-\]
-
-The simulated tail exponent is:
-
-\[
-\gamma_t=\exp(x_t)>0.
-\]
-
-### 2. Routing capacity
-
-The tail exponent shapes a power-law degree distribution. The engine maps gamma to:
-
-- direct multiplier: \(E[k]\);
-- indirect multiplier: \(E[k^2]/E[k]-1\).
-
-Direct routing capacity equals available base liquidity multiplied by the direct multiplier. The indirect multiplier is retained as a network diagnostic.
-
-### 3. Risk events
-
-The liquidity-risk threshold is a lower percentile of baseline direct routing capacity. A risk day is a scenario-day below that threshold. The headline metrics are:
-
-- risk-day rate;
-- risk-scenario rate;
-- total routing-capacity shortfall;
-- routing-capacity shortfall as a percentage of total available routing liquidity.
-
-### 4. EWI emulator
-
-The EWI is not fitted inside the engine. It is a performance-controlled signal emulator defined by:
-
-- target recall;
-- target precision;
-- lead time;
-- random seed.
-
-The app reports target and achieved recall and precision, evaluable event days, signal days, true positives, and false positives.
-
-### 5. Policy strategies
-
-The mitigation comparison contains five outcomes:
-
-1. **Baseline: no intervention**
-2. **Reactive countercyclical intervention**
-3. **EWI-targeted intervention**
-4. **Randomized timing, equal volume**
-5. **Perfect-information oracle, equal volume**
-
-Randomized timing and the oracle use the EWI support-day budget. The reactive countercyclical rule is event-driven and can use a different realized volume. The comparison table therefore reports total support volume for every policy.
-
-See [`MODEL_DESCRIPTION.md`](MODEL_DESCRIPTION.md) for full equations, parameter definitions, policy logic, and the module map.
+For the formal model, equations, parameter definitions, and implementation
+logic, see [`MODEL_DESCRIPTION.md`](MODEL_DESCRIPTION.md).
 
 ## Installation
+
+Create a virtual environment:
 
 ```bash
 python -m venv .venv
 ```
 
-Activate the environment:
+Activate it on Windows:
+
+```powershell
+.venv\Scripts\activate
+```
+
+Activate it on macOS or Linux:
 
 ```bash
-# Windows
-.venv\Scripts\activate
-
-# macOS or Linux
 source .venv/bin/activate
 ```
 
-Install dependencies:
+Install the dependencies:
 
 ```bash
 python -m pip install -r requirements.txt
@@ -147,79 +110,77 @@ Python 3.10 or later is recommended.
 
 ## Quick start
 
-From the repository root:
+From the repository root, run:
 
 ```bash
 streamlit run app.py
 ```
 
-## Tests
+## S = 1 integration smoke test
 
-Run the complete test suite:
+The repository uses a single-scenario integration smoke test instead of a
+separate test suite. It checks that the smallest supported scenario dimension
+passes through the simulation, EWI, policy, randomized benchmark, and
+five-strategy comparison pipeline without runtime or shape errors.
+
+Run it with pytest:
 
 ```bash
-pytest -q
+python -m pytest examples/test_s1_default.py -v
 ```
 
-Run the single-scenario smoke test from the repository root:
+Run it as a standalone reproducibility example:
 
 ```bash
 python -m examples.test_s1_default
 ```
 
-The S=1 example checks that the modules execute end-to-end with the smallest supported scenario dimension. It is a software integration test, not a statistically stable policy estimate.
+The standalone run creates `s1_smoke_test_comparison.csv`. The export contains
+one row per strategy and includes the simulation, EWI, policy, benchmark, and
+realized-run parameters used to generate the results.
 
-## Comparison-module usage
+See [`examples/README_S1_DEFAULT.md`](examples/README_S1_DEFAULT.md) for the
+scope, execution instructions, exported fields, and interpretation of the
+smoke test.
 
-Merge the deterministic policy metrics and output dictionaries before building the comparison:
+## Repository structure
 
-```python
-countercyclical_result = {**countercyclical_metrics, **countercyclical_outputs}
-ewi_result = {**ewi_metrics, **ewi_outputs}
-oracle_result = {**oracle_metrics, **oracle_outputs}
-
-comparison = build_policy_comparison(
-    baseline=baseline_metrics,
-    countercyclical=countercyclical_result,
-    ewi=ewi_result,
-    randomized=randomized_replications,
-    oracle=oracle_result,
-)
-```
-
-The randomized input remains a DataFrame because the comparison reports medians across benchmark replications.
-
-## Repository contents
-
-| Path | Description |
+| Path | Purpose |
 |---|---|
-| `app.py` | Streamlit entry point and cached model pipeline. |
-| `src/simulation.py` | Log-gamma topology process and baseline routing paths. |
-| `src/topology.py` | Degree distribution, moments, and multiplier grids. |
-| `src/metrics.py` | Liquidity-risk metrics and shortfall measures. |
-| `src/ewi.py` | Performance-controlled EWI emulator. |
-| `src/policy.py` | Support masks, policy application, randomized benchmark, and oracle. |
-| `src/comparison.py` | Five-strategy table, chart, and export helpers. |
-| `src/plotting.py` | Routing-path figures. |
-| `src/definitions.py` | Glossary. |
-| `examples/` | S=1 smoke test and supporting documentation. |
-| `tests/` | Automated tests. |
-| `MODEL_DESCRIPTION.md` | Full model logic and equations. |
+| `app.py` | Streamlit interface and cached computational pipeline. |
+| `src/simulation.py` | Mean-reverting topology process, routing paths, threshold, and event mask. |
+| `src/topology.py` | Degree distribution, network moments, and multiplier grids. |
+| `src/metrics.py` | Liquidity-risk rates and shortfall measures. |
+| `src/ewi.py` | Performance-controlled warning-signal emulator and diagnostics. |
+| `src/policy.py` | Activation masks, support application, randomized benchmark, and oracle. |
+| `src/comparison.py` | Five-strategy result normalization, comparison table, figure, and export helpers. |
+| `src/plotting.py` | Network-state and routing-capacity figures. |
+| `src/definitions.py` | Application glossary. |
+| `examples/test_s1_default.py` | S = 1 integration smoke test and auditable CSV export. |
+| `examples/README_S1_DEFAULT.md` | Smoke-test instructions and interpretation. |
+| `MODEL_DESCRIPTION.md` | Formal model, equations, assumptions, and implementation sequence. |
 | `requirements.txt` | Python dependencies. |
 | `CITATION.cff` | Citation metadata. |
-| `LICENSE` | Apache-2.0 license. |
+| `LICENSE` | Apache License 2.0. |
 
 ## Scope and limitations
 
-The model isolates network-driven routing-capacity effects. It does not estimate an institution-level graph or model strategic behavior, balance-sheet adjustment, prices, margins, collateral calls, or crisis probabilities. The EWI is an emulator, the memory half-life is a scenario assumption, and the oracle is an infeasible upper benchmark. Results should be interpreted comparatively and conditional on the selected assumptions.
+The engine is a reduced-form policy laboratory for network-routing effects. It
+does not estimate an institution-level counterparty graph or model strategic
+behavior, balance-sheet adjustment, market prices, margins, collateral calls,
+or crisis probabilities. The EWI is a controlled signal emulator rather than a
+fitted forecasting model. The oracle is an infeasible upper benchmark. Results
+should therefore be interpreted comparatively and conditional on the selected
+assumptions.
 
 ## Reproducibility
 
 - All stochastic components use explicit seeds.
-- The model configuration is held in dataclasses.
+- Model settings are stored in configuration objects.
 - Dependencies are recorded in `requirements.txt`.
-- The S=1 smoke test exercises the full pipeline.
-- Figures and tables can be exported from the application.
+- The S = 1 smoke test exercises the integrated computational pipeline.
+- The smoke-test CSV records the settings associated with every strategy row.
+- Application figures, diagnostics, settings, and tables can be exported.
 
 ## Citation
 
@@ -231,4 +192,8 @@ Apache License 2.0. See [`LICENSE`](LICENSE).
 
 ## Contributing
 
-Issues and pull requests are welcome. Run the smoke test and `pytest -q` before submitting changes.
+Issues and pull requests are welcome. Before submitting a change, run:
+
+```bash
+python -m pytest examples/test_s1_default.py -v
+```
