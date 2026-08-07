@@ -1,0 +1,16 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+title: "Network Routing Liquidity Risk Simulation Engine"
+abstract: "A Streamlit simulation engine for network-driven liquidity-risk analysis, performance-controlled early-warning indicators, and equal-volume comparison of random versus EWI-triggered liquidity support."
+authors:
+  - family-names: "van Hest"
+    given-names: "Tim"
+version: "1.0.0"
+date-released: "2026-07-26"
+license: "Apache-2.0"
+keywords:
+  - systemic liquidity risk
+  - financial networks
+  - early-warning indicators
+  - routing capacity
+  - Monte Carlo simulation
