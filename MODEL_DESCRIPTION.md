@@ -36,16 +36,16 @@ liquidity injections affect simulated routing-capacity shortfalls.
 | $b$ | Normal liquidity buffer, expressed as a percentage. |
 | $\gamma_{s,t}$ | Positive tail exponent governing the degree distribution. |
 | $x_{s,t}$ | Log tail exponent, $x_{s,t}=\log(\gamma_{s,t})$. |
-| $\mu_\gamma$ | Requested stationary arithmetic mean of $\gamma$. |
-| $\sigma_\gamma$ | Requested stationary standard deviation of $\gamma$. |
-| $\mu_x$ | Stationary mean of log-$\gamma$. |
-| $\sigma_x$ | Stationary standard deviation of log-$\gamma$. |
-| $\phi$ | Daily AR(1) persistence coefficient. |
+| $\mu_\gamma$ | Requested stationary arithmetic mean of gamma. |
+| $\sigma_\gamma$ | Requested stationary standard deviation of gamma. |
+| $\mu_x$ | Stationary mean of log-gamma. |
+| $\sigma_x$ | Stationary standard deviation of log-gamma. |
+| $\rho$ | Daily AR(1) persistence coefficient. |
 | $h$ | Mean-reversion half-life in trading days. |
-| $LM_{s,t}$ | Direct routing multiplier. |
-| $ILM_{s,t}$ | Indirect routing multiplier. |
-| $L^{D}_{s,t}$ | Direct routing capacity. |
-| $L^{I}_{s,t}$ | Indirect routing capacity. |
+| $LM_{s,t}$ | Direct liquidity routing multiplier. |
+| $ILM_{s,t}$ | Indirect liquidity routing multiplier. |
+| $L^{D}_{s,t}$ | Direct liquidity routing capacity|
+| $L^{I}_{s,t}$ | Indirect liquidity routing capacity |
 | $\tau$ | Liquidity-risk threshold. |
 | $u_{s,t}$ | Indicator that policy support is active. |
 
@@ -64,7 +64,7 @@ liquidity injections affect simulated routing-capacity shortfalls.
 | Random seed | `seed` | 42 | Seed controlling reproducible simulation draws. |
 | Gamma mean | `mu` | 1.15732 | Requested stationary arithmetic mean of $\gamma$. |
 | Gamma standard deviation | `sigma` | 0.53811 | Requested stationary standard deviation of $\gamma$. |
-| Memory half-life | `halftime` | 10 | Assumed half-life of a log-$\gamma$ deviation, in trading days. |
+| Memory half-life | `halftime` | 10 | Assumed half-life of a log-gamma deviation from the mean, in trading days. |
 
 ### 3.2 EWI settings
 
@@ -99,45 +99,31 @@ Assuming a stationary lognormal distribution, the gamma-scale inputs are
 converted to log-space parameters as follows:
 
 $$
-\sigma_x^2
-=
-\log\left(1+\frac{\sigma_\gamma^2}{\mu_\gamma^2}\right),
+\sigma_x^2 = \log\left(1+\frac{\sigma_\gamma^2}{\mu_\gamma^2}\right),
 $$
 
 $$
-\mu_x
-=
-\log(\mu_\gamma)-\frac{1}{2}\sigma_x^2.
+\mu_x = \log(\mu_\gamma)-\frac{1}{2}\sigma_x^2.
 $$
 
 The daily persistence coefficient follows from the configured half-life:
 
-$$
-\phi = 2^{-1/h}
-     = \exp\left(-\frac{\log 2}{h}\right),
-\qquad h>0.
+$$ 
+\rho = 2^{-1/h} = \exp\left(-\frac{\log 2}{h}\right), \qquad h>0.
 $$
 
-For a no-memory specification, the implementation sets $\phi=0$. The
+For a no-memory specification, the implementation sets $\rho = 0$. The
 innovation standard deviation is scaled to preserve the requested stationary
-variance of log-$\gamma$:
+variance of log-gamma:
 
 $$
-\sigma_\eta = \sigma_x\sqrt{1-\phi^2}.
+\sigma_\eta = \sigma_x\sqrt{(1-\rho^2)}.
 $$
 
 The stationary AR(1) process is:
 
 $$
-x_{s,t}
-=
-\mu_x
-+
-\phi\left(x_{s,t-1}-\mu_x\right)
-+
-\sigma_\eta\varepsilon_{s,t},
-\qquad
-\varepsilon_{s,t}\sim\mathcal{N}(0,1).
+x_{s,t} = \mu_x + \rho\left(x_{s,t-1}-\mu_x\right) + \sigma_\eta\varepsilon_{s,t}, \qquad \varepsilon_{s,t}\sim\mathcal{N}(0,1).
 $$
 
 The simulated state is transformed back to the original scale:
@@ -162,36 +148,25 @@ $$
 The normalized degree probability is:
 
 $$
-p_k(\gamma)
-=
-\frac{k^{-\gamma}}
-{\sum_{j=1}^{N-1}j^{-\gamma}}.
+p_k(\gamma) = \frac{k^{-\gamma}} {\sum_{j=1}^{N-1}j^{-\gamma}}.
 $$
 
 The direct routing multiplier is the expected degree:
 
 $$
-LM(\gamma)
-=
-\mathbb{E}[k]
-=
-\sum_{k=1}^{N-1}k\,p_k(\gamma).
+LM(\gamma) = \mathbb{E}[k] = \sum_{k=1}^{N-1}k\,p_k(\gamma).
 $$
 
 The indirect routing multiplier is:
 
 $$
-ILM(\gamma)
-=
-\frac{\mathbb{E}[k^2]}{\mathbb{E}[k]}-1,
+ILM(\gamma) = \frac{\mathbb{E}[k^2]}{\mathbb{E}[k]}-1,
 $$
 
 where
 
 $$
-\mathbb{E}[k^2]
-=
-\sum_{k=1}^{N-1}k^2p_k(\gamma).
+\mathbb{E}[k^2] = \sum_{k=1}^{N-1}k^2p_k(\gamma).
 $$
 
 `make_multiplier_grids` precomputes the direct and indirect multiplier curves.
@@ -210,29 +185,27 @@ $$
 Direct routing capacity is:
 
 $$
-L^{D}_{s,t}=A\,LM_{s,t}.
+L^{D}_{s,t}=A \times LM_{s,t}.
 $$
 
 Indirect routing capacity is:
 
 $$
-L^{I}_{s,t}=A\,ILM_{s,t}.
+L^{I}_{s,t}=A \times ILM_{s,t}.
 $$
 
 The liquidity-risk threshold is the configured lower percentile of the pooled
 baseline direct-capacity distribution:
 
 $$
-\tau
-=
-Q_q\left(\left\{L^{D}_{s,t}\right\}_{s,t}\right),
+\tau = Q_q(L^{D}_{s,t}),
 $$
 
 where $Q_q$ denotes the percentile associated with
 `liquidity_risk_q`. A scenario-day is classified as a risk day when:
 
 $$
-L^{D}_{s,t}<\tau.
+L^{D}_{s,t} < \tau.
 $$
 
 Direct routing capacity defines risk events. Indirect routing capacity is
@@ -243,29 +216,25 @@ reported as a network diagnostic and does not determine the event mask.
 Let
 
 $$
-R_{s,t}=\mathbf{1}\left\{L^{D}_{s,t}<\tau\right\}.
+R_{s,t}=\mathbf{1}(L^{D}_{s,t}<\tau\).
 $$
 
 For $S$ scenarios and $T$ trading days, the risk-day rate is:
 
 $$
-100\times\frac{1}{ST}
-\sum_{s=1}^{S}\sum_{t=1}^{T}R_{s,t}.
+100\times\frac{1}{ST} \sum_{s=1}^{S}\sum_{t=1}^{T}R_{s,t}.
 $$
 
 The risk-scenario rate is:
 
 $$
-100\times\frac{1}{S}
-\sum_{s=1}^{S}
-\mathbf{1}\left\{\sum_{t=1}^{T}R_{s,t}>0\right\}.
+100\times\frac{1}{S} \sum_{s=1}^{S} \mathbf{1} \{\sum_{t=1}^{T}R_{s,t}>0\}.
 $$
 
 Total routing-capacity shortfall is:
 
 $$
-\sum_{s=1}^{S}\sum_{t=1}^{T}
-\max\left(\tau-L^{D}_{s,t},0\right).
+\sum_{s=1}^{S}\sum_{t=1}^{T} \max(\tau-L^{D}_{s,t},0).
 $$
 
 Relative shortfall divides total shortfall by total baseline direct routing
@@ -281,17 +250,11 @@ lead time, and a random seed.
 For events that can be evaluated at the configured lead time:
 
 $$
-\text{Recall}
-=
-\frac{\text{correctly signalled evaluable events}}
-{\text{all evaluable events}}.
+\text{Recall} = \frac{\text{correctly signalled evaluable events}} {\text{all evaluable events}}.
 $$
 
 $$
-\text{Precision}
-=
-\frac{\text{true-positive signal days}}
-{\text{all signal days}}.
+\text{Precision} = \frac{\text{true-positive signal days}} {\text{all signal days}}.
 $$
 
 True-positive signals are positioned at the specified lead before selected
@@ -314,15 +277,13 @@ injection percentage. Let $u_{s,t}$ equal one when support is active and zero
 otherwise. Available liquidity under a policy becomes:
 
 $$
-A^{P}_{s,t}
-=
-I\left(1-\frac{b}{100}+u_{s,t}\frac{c}{100}\right).
+A^{P}_{s,t} = I\left(1-\frac{b}{100}+u_{s,t}\frac{c}{100}\right).
 $$
 
 Policy-adjusted direct routing capacity is:
 
 $$
-L^{D,P}_{s,t}=A^{P}_{s,t}LM_{s,t}.
+L^{D,P}_{s,t}=A^{P}_{s,t} \times LM_{s,t}.
 $$
 
 Support is added before network scaling. Consequently, the same network state
