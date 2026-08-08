@@ -156,6 +156,7 @@ smoke test.
 | `src/comparison.py` | Five-strategy result normalization, comparison table, figure, and export helpers. |
 | `src/plotting.py` | Network-state and routing-capacity figures. |
 | `src/definitions.py` | Application glossary. |
+| `assets/NetworkSimulationEngineLogo` | Logo. |
 | `examples/test_s1_default.py` | S = 1 integration smoke test and auditable CSV export. |
 | `examples/README_S1_DEFAULT.md` | Smoke-test instructions and interpretation. |
 | `MODEL_DESCRIPTION.md` | Formal model, equations, assumptions, and implementation sequence. |
