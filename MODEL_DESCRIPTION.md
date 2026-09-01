@@ -138,13 +138,6 @@ be identical to the configured value.
 
 ## 5. Network topology and routing multipliers
 
-For each admissible degree $k\in\{1,\ldots,N-1\}$, the model assigns a
-power-law weight:
-
-$$
-w_k(\gamma)=k^{-\gamma}.
-$$
-
 The normalized degree probability is:
 
 $$
@@ -329,60 +322,14 @@ must not be interpreted as an implementable policy.
 simulate network paths, generate EWI signals, or apply policy support. Those
 calculations occur earlier in the pipeline.
 
-### 11.1 Inputs
-
-Each deterministic policy is produced by `run_policy`, which returns its main
-risk metrics and supplementary policy outputs separately. Before comparison,
-these dictionaries are merged so that one strategy object contains both the
-outcome measures and the realized support information:
-
-```python
-countercyclical_result = {
-    **countercyclical_metrics,
-    **countercyclical_outputs,
-}
-
-ewi_result = {
-    **ewi_metrics,
-    **ewi_outputs,
-}
-
-oracle_result = {
-    **oracle_metrics,
-    **oracle_outputs,
-}
-```
-
-The objects passed to `build_policy_comparison` are:
-
-- the baseline metric dictionary;
-- the merged countercyclical result;
-- the merged EWI-targeted result;
-- the randomized-replication DataFrame; and
-- the merged oracle result.
-
-```python
-comparison = build_policy_comparison(
-    baseline=baseline_metrics,
-    countercyclical=countercyclical_result,
-    ewi=ewi_result,
-    randomized=randomized_replications,
-    oracle=oracle_result,
-)
-```
-
-EWI signal diagnostics such as recall and precision must not be passed as the
-EWI policy result. The comparison requires policy outcomes, including the
-risk-scenario rate, risk-day rate, and total shortfall.
-
-### 11.2 Deterministic strategies
+### 11.1 Deterministic strategies
 
 For the baseline, countercyclical, EWI-targeted, and oracle strategies, the
 comparison layer creates one normalized row per strategy. It verifies that the
 required policy metrics are present and places the outputs in a common column
 schema.
 
-### 11.3 Randomized benchmark
+### 11.2 Randomized benchmark
 
 The randomized input remains a DataFrame because it contains multiple benchmark
 replications. The comparison layer summarizes those replications using their
@@ -390,7 +337,7 @@ median outcome. This produces one randomized-benchmark row while preserving the
 interpretation of randomized timing as a distribution rather than a single
 arbitrary draw.
 
-### 11.4 Output interpretation
+### 11.3 Output interpretation
 
 The resulting table contains one row for each of the five strategies. Its main
 columns report:
