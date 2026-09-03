@@ -4,7 +4,7 @@ def degree_moments(gamma, n_nodes:int):
     if n_nodes<2: raise ValueError("n_nodes must be at least 2")
     g=np.asarray(gamma,float)
     if np.any(~np.isfinite(g)) or np.any(g<=0): raise ValueError("gamma must be positive and finite")
-    k=np.arange(1,n_nodes+1,dtype=float)
+    k=np.arange(1,n_nodes,dtype=float)
     w=k**(-g[...,None]); p=w/w.sum(axis=-1,keepdims=True)
     return (p*k).sum(axis=-1),(p*k**2).sum(axis=-1)
 def liquidity_multipliers(gamma,n_nodes:int):
