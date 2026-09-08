@@ -298,7 +298,7 @@ def multiplier_distribution_figure(
             f"= {direct_quantile:.2f}x"
         ),
     )
-    ax_middle.set_xlabel("Direct routing multiplier E[k]")
+    ax_middle.set_xlabel("Direct routing multiplier")
     ax_middle.set_ylabel("Frequency (scenario-days)")
     ax_middle.set_title("B. Resulting direct routing multiplier")
     ax_middle.legend(loc="upper right", frameon=False)
@@ -320,7 +320,7 @@ def multiplier_distribution_figure(
         linestyle="--",
         label=f"Mean = {i_mean:.2f}",
     )
-    ax_right.set_xlabel("Indirect routing multiplier E[k^2]/E[k] - 1")
+    ax_right.set_xlabel("Indirect routing multiplier")
     ax_right.set_ylabel("Frequency (scenario-days)")
     ax_right.set_title("C. Resulting indirect routing multiplier")
     ax_right.legend(frameon=False)
