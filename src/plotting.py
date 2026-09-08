@@ -19,9 +19,6 @@ from __future__ import annotations
 from typing import Optional
 
 import matplotlib
-
-# CODECHECK: select the backend before importing pyplot so the module also works
-# in headless and automated environments.
 matplotlib.use("Agg")
 
 import matplotlib.pyplot as plt
@@ -61,47 +58,6 @@ def _set_trading_day_axis(ax: Axes, trading_days: int) -> None:
     """Apply a common one-based trading-day axis."""
     ax.set_xlim(1, trading_days)
     ax.margins(x=0)
-
-
-def realized_gamma_halflife(gamma_path: ArrayLike) -> float:
-    """Estimate the realized AR(1) half-life of one gamma scenario.
-
-    The simulation is specified for log-gamma, so persistence is estimated from
-    ``log(gamma_t)``. The estimator first demeans that path and then estimates
-    the no-intercept AR(1) coefficient by ordinary least squares.
-
-    Parameters
-    ----------
-    gamma_path:
-        Positive daily gamma observations for one scenario.
-
-    Returns
-    -------
-    float
-        Estimated half-life in trading days. ``numpy.nan`` is returned when
-        there are fewer than three valid observations or when the estimated
-        persistence is outside ``0 < phi < 1``.
-    """
-    path = np.asarray(gamma_path, dtype=float).ravel()
-    path = path[np.isfinite(path) & (path > 0.0)]
-
-    if path.size < 3:
-        return float("nan")
-
-    log_gamma = np.log(path)
-    centered = log_gamma - np.mean(log_gamma)
-    lagged = centered[:-1]
-    current = centered[1:]
-
-    denominator = float(np.dot(lagged, lagged))
-    if denominator <= 0.0:
-        return float("nan")
-
-    phi_hat = float(np.dot(lagged, current) / denominator)
-    if not 0.0 < phi_hat < 1.0:
-        return float("nan")
-
-    return float(np.log(0.5) / np.log(phi_hat))
 
 
 def routing_paths_figure(
@@ -252,11 +208,6 @@ def multiplier_distribution_figure(
     risk_quantile_pct: float,
 ) -> Figure:
     """Plot gamma and direct and indirect routing-multiplier distributions.
-
-    The gamma half-life is estimated separately for each scenario. The median
-    across estimable scenarios is reported as a text-only legend entry in panel
-    A. Calculating half-life before flattening is essential because flattening
-    would incorrectly join the end of one path to the start of the next.
     """
     gamma_array = np.asarray(gamma, dtype=float)
     if gamma_array.ndim == 1:
@@ -271,20 +222,6 @@ def multiplier_distribution_figure(
 
     if not 0.0 <= risk_quantile_pct <= 100.0:
         raise ValueError("risk_quantile_pct must be between 0 and 100.")
-
-    # estimate persistence scenario by scenario before pooling the
-    # observations for the histogram.
-    scenario_halflives = np.asarray(
-        [realized_gamma_halflife(path) for path in gamma_paths],
-        dtype=float,
-    )
-    valid_halflives = scenario_halflives[np.isfinite(scenario_halflives)]
-    median_halflife = (
-        float(np.median(valid_halflives))
-        if valid_halflives.size > 0
-        else float("nan")
-    )
-
     g = _finite_1d(gamma_array, "gamma")
     m = _finite_1d(direct_lm, "direct_lm")
     i = _finite_1d(indirect_lm, "indirect_lm")
@@ -327,15 +264,6 @@ def multiplier_distribution_figure(
         linestyle="--",
         label=f"Mean + 1 SD = {g_mean + g_std:.2f}",
     )
-
-    halflife_label = (
-        f"Median realized half-life = {median_halflife:.2f} days"
-        if np.isfinite(median_halflife)
-        else "Median realized half-life = not estimable"
-    )
-    # half-life measures time, whereas the horizontal axis measures
-    # gamma. A text-only legend entry is therefore used 
-    ax_left.plot([], [], linestyle="none", marker="", label=halflife_label)
 
     ax_left.set_xlabel("Tail exponent gamma")
     ax_left.set_ylabel("Frequency (scenario-days)")
