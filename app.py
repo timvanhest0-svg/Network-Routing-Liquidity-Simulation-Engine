@@ -63,7 +63,7 @@ st.caption('A simulation-based framework for network liquidity-risk assessment a
 # Support is split into two additive channels (buffer_release + injection); the
 # simulation is driven by their sum (PolicyConfig.combined_support_pct).
 D = dict(n_nodes=24, scenarios=1000, trading_days=200, seed=42, investment=100.,
-         buffer=40., q=5., sigma=.538, mu=1.157, halftime=10, recall=.70, precision=.25,
+         buffer=40., q=5., sigma=.538, mu=1.157, halftime=10, recall=.70, precision=.19,
          lead=5, buffer_release=5., injection=5., duration=10, delay=5, reps=1000)
 for k, v in D.items():
     st.session_state.setdefault(k, v)
