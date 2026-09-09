@@ -70,8 +70,8 @@ liquidity injections affect simulated routing-capacity shortfalls.
 
 | Setting | Code field | Default | Interpretation |
 |---|---|---:|---|
-| Target recall | `target_recall` | 0.70 | Intended share of evaluable risk events receiving a correct advance signal. |
-| Target precision | `target_precision` | 0.25 | Intended share of signal days associated with a true event. |
+| Target recall | `target_recall` | 0.30 | Intended share of evaluable risk events receiving a correct advance signal. |
+| Target precision | `target_precision` | 0.20 | Intended share of signal days associated with a true event. |
 | Lead time | `lead_time` | 5 | Number of days between a signal and its associated event. |
 | Random seed | `seed` | 42 | Seed controlling reproducible signal placement. |
 
