@@ -31,8 +31,8 @@ from src.policy import (
 from src.simulation import SimulationConfig, simulate_base_paths
 
 
-BENCHMARK_REPLICATIONS = 10
-BENCHMARK_SEED_OFFSET = 1_000
+BENCHMARK_REPLICATIONS = 1000
+BENCHMARK_SEED_OFFSET = 42
 OUTPUT_CSV = Path("s1_smoke_test_comparison.csv")
 
 REQUIRED_POLICY_KEYS = {
