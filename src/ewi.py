@@ -84,7 +84,7 @@ class EWIConfig:
         Seed used for reproducible selection of true- and false-positive days.
     """
 
-    target_recall: float = 0.70
+    target_recall: float = 0.30
     target_precision: float = 0.25
     lead_time: int = 5
     seed: int = 42
