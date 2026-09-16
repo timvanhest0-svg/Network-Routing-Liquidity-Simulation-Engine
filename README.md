@@ -112,7 +112,6 @@ randomized-timing support at equal spend) and the support volume used by each
 strategy (buffer release, central-bank injection, and total support as a
 percentage of available routing liquidity).
 
-![Overviewl-0-overview.png](assets/panel-3-mitigation-results.png)
 
 ### 4. Model definitions
 
