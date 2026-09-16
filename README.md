@@ -77,7 +77,7 @@ Explains the policy question addressed by the engine, the scope of the model, an
 (0. Overview, 1. Network simulation and routing paths, 2. EWI settings and evaluation, 
 3. Mitigation results, 4. Model definitions, 5. Downloads).
 
-[![Overviewl-0-overview.png](assets/panel-0-overview.png)
+![Overviewl-0-overview.png](assets/panel-0-overview.png)
 
 ### 1. Network simulation and routing paths
 
@@ -87,6 +87,8 @@ base) and renders the resulting distribution of the tail exponent (γ) together
 with the direct and indirect routing multipliers it implies, shown both for a
 single realized network state and across all simulated scenario-days.
 
+![Overviewl-0-overview.png](assets/panel-1-network-simulation.png)
+
 
 ### 2. Risk metrics and EWI settings
 
@@ -95,6 +97,8 @@ precision, fixed EWI lead time) entered in the left-hand panel and reports the
 baseline liquidity-risk evaluation metrics (baseline risk-scenario rate,
 baseline risk-day rate, baseline relative shortfall) together with the
 configured versus realized recall and precision of the warning signal.
+
+![Overviewl-0-overview.png](assets/panel-2risk-metrics-ewi.png)
 
 
 ### 3. Mitigation results
@@ -108,12 +112,15 @@ randomized-timing support at equal spend) and the support volume used by each
 strategy (buffer release, central-bank injection, and total support as a
 percentage of available routing liquidity).
 
+![Overviewl-0-overview.png](assets/panel-3-mitigation-results.png)
 
 ### 4. Model definitions
 
 Provides a searchable glossary of all model concepts and formulas (tail
 exponent, network size, direct/indirect liquidity multipliers, network-adjusted
 routing capacity, etc.) for easy reference while navigating the other pages.
+
+![Overviewl-0-overview.png](assets/panel-4-model-definitions.png)
 
 
 ### 5. Downloads
