@@ -78,7 +78,7 @@ and how to read the remaining pages (0. Overview, 1. Network simulation and
 routing paths, 2. EWI settings and evaluation, 3. Mitigation results,
 4. Model definitions, 5. Downloads
 
-assets/panel-0-overview.png
+(assets/panel-0-overview.png)
 
 ### 1. Network simulation and routing paths
 
