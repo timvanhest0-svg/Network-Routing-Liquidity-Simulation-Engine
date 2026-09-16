@@ -119,8 +119,6 @@ Provides a searchable glossary of all model concepts and formulas (tail
 exponent, network size, direct/indirect liquidity multipliers, network-adjusted
 routing capacity, etc.) for easy reference while navigating the other pages.
 
-![Overviewl-0-overview.png](assets/panel-4-model-definitions.png)
-
 
 ### 5. Downloads
 
