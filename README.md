@@ -98,7 +98,7 @@ baseline liquidity-risk evaluation metrics (baseline risk-scenario rate,
 baseline risk-day rate, baseline relative shortfall) together with the
 configured versus realized recall and precision of the warning signal.
 
-![Overviewl-0-overview.png](assets/panel-2risk-metrics-ewi.png)
+![Overviewl-0-overview.png](assets/panel-2-risk-metrics-ewi.png)
 
 
 ### 3. Mitigation results
