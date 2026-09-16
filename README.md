@@ -112,6 +112,7 @@ randomized-timing support at equal spend) and the support volume used by each
 strategy (buffer release, central-bank injection, and total support as a
 percentage of available routing liquidity).
 
+![Overviewl-0-overview.png](assets/panel-3-mitigation-results.png)
 
 ### 4. Model definitions
 
@@ -119,6 +120,7 @@ Provides a searchable glossary of all model concepts and formulas (tail
 exponent, network size, direct/indirect liquidity multipliers, network-adjusted
 routing capacity, etc.) for easy reference while navigating the other pages.
 
+![Overviewl-0-overview.png](assets/panel-4-model-definitions.png)
 
 ### 5. Downloads
 
