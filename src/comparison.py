@@ -61,7 +61,7 @@ def _policy_row(label: str, result: dict) -> dict:
         "Policy": label,
         "Risk-scenario rate (%)": round(float(result["risk_scenario_rate"]), 2),
         "Risk-day rate (%)": round(float(result["risk_day_rate"]), 2),
-        "Total routing-capacity shortfall": round(float(result["total_shortfall"]), 0),
+        "Total routing-capacity shortfall": float(result["total_shortfall"]),
         "Total support volume": round(float(result.get("total_support_volume", 0.0)), 0),
     }
 
@@ -87,7 +87,7 @@ def _randomized_timing_row(randomized: pd.DataFrame) -> dict:
         "Policy": "Randomized timing (equal volume)",
         "Risk-scenario rate (%)": round(float(randomized["risk_scenario_rate"].median()), 2),
         "Risk-day rate (%)": round(float(randomized["risk_day_rate"].median()), 2),
-        "Total routing-capacity shortfall": round(float(randomized["total_shortfall"].median()), 0),
+        "Total routing-capacity shortfall": float(randomized["total_shortfall"].median()),
         "Total support volume": round(float(randomized["total_support_volume"].median()), 0),
     }
 
