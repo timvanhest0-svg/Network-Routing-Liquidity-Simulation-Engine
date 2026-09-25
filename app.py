@@ -62,9 +62,26 @@ st.caption('A simulation-based framework for network liquidity-risk assessment a
 # --- Default session state ---------------------------------------------------
 # Support is split into two additive channels (buffer_release + injection); the
 # simulation is driven by their sum (PolicyConfig.combined_support_pct).
-D = dict(n_nodes=24, scenarios=1000, trading_days=200, seed=42, investment=100.,
-         buffer=40., q=5., sigma=.538, mu=1.157, halftime=10, recall=.30, precision=.20,
-         lead=5, buffer_release=5., injection=5., duration=10, delay=5, reps=1000)
+D = dict(
+    n_nodes=24,
+    scenarios=1000,
+    trading_days=200,
+    seed=42,
+    investment=100.,
+    buffer=40.,
+    q=5.,
+    sigma=0.5381,
+    mu=1.1573,
+    halftime=10,
+    recall=.30,
+    precision=.20,
+    lead=5,
+    buffer_release=5.,
+    injection=5.,
+    duration=10,
+    delay=5,
+    reps=1000
+)
 for k, v in D.items():
     st.session_state.setdefault(k, v)
 
@@ -465,13 +482,28 @@ elif page == PAGE_POLICY:
     # Single source of truth: table + relative shortfall column.
     df = comparison_table(base, rnd, em, ex, total_available, cm, cx, om, ox)
 
+    # ---- Headline relative result----
+    ewi_shortfall_reduction_pct = _to_float_scalar(ex.get('shortfall_reduction_pct'))
+    ewi_risk_day_reduction_pct  = _to_float_scalar(ex.get('risk_day_reduction_pct'))
+
+    st.success(
+        f"**Relative to the no-intervention baseline, EWI-triggered support reduced the "
+        f"cumulative routing-capacity shortfall by ~{ewi_shortfall_reduction_pct:.1f}% and "
+        f"the liquidity-risk-day rate by ~{ewi_risk_day_reduction_pct:.1f}%.** Targeting the "
+        f"same volume of liquidity where the network is fragile is what creates the difference."
+    )
+
     # ---- Headline relative result, stated in words. ----
-    rnd_short  = _to_float_scalar(df.loc[1, 'Total routing-capacity shortfall'])
-    ewi_short  = _to_float_scalar(df.loc[2, 'Total routing-capacity shortfall'])
-    base_short = _to_float_scalar(df.loc[0, 'Total routing-capacity shortfall'])
-    ewi_red = (base_short - ewi_short) / base_short * 100 if base_short > 0 else float('nan')
-    rnd_red = (base_short - rnd_short) / base_short * 100 if base_short > 0 else float('nan')
-    st.success(f"**At equal spend, EWI-triggered support reduced the routing-capacity shortfall by ~{ewi_red:.1f}% versus ~{rnd_red:.1f}% for randomized-timing support.** Targeting the same volume of liquidity where the network is fragile is what creates the difference.")
+    def _shortfall_for_policy(policy):
+        values = df.loc[
+            df['Policy'].eq(policy),
+            'Total routing-capacity shortfall',
+        ]
+        if len(values) != 1:
+            raise ValueError(
+                f"Expected exactly one comparison row for {policy!r}; found {len(values)}."
+            )
+        return _to_float_scalar(values.iloc[0])
 
     # ---- Top-line liquidity figures — expressed relative to available routing liquidity. ----
     split = support_split(n.investment, p.buffer_release_pct, p.injection_pct, ex['support_active_days'])
