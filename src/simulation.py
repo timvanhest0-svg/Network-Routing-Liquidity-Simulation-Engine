@@ -106,7 +106,7 @@ class SimulationConfig:
 
     investment: float = 100.0
     buffer_normal_pct: float = 40.0
-    liquidity_risk_q: float = 2.5
+    liquidity_risk_q: float = 5
     seed: int = 42
 
     # User-facing parameters on the original gamma scale.
