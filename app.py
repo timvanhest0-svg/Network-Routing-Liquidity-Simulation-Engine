@@ -471,7 +471,7 @@ elif page == PAGE_POLICY:
     base_short = _to_float_scalar(df.loc[0, 'Total routing-capacity shortfall'])
     ewi_red = (base_short - ewi_short) / base_short * 100 if base_short > 0 else float('nan')
     rnd_red = (base_short - rnd_short) / base_short * 100 if base_short > 0 else float('nan')
-    st.success(f"**At equal spend, EWI-triggered support reduced the routing-capacity shortfall by ~{ewi_red:.0f}% versus ~{rnd_red:.0f}% for randomized-timing support.** Targeting the same volume of liquidity where the network is fragile is what creates the difference.")
+    st.success(f"**At equal spend, EWI-triggered support reduced the routing-capacity shortfall by ~{ewi_red:.1f}% versus ~{rnd_red:.1f}% for randomized-timing support.** Targeting the same volume of liquidity where the network is fragile is what creates the difference.")
 
     # ---- Top-line liquidity figures — expressed relative to available routing liquidity. ----
     split = support_split(n.investment, p.buffer_release_pct, p.injection_pct, ex['support_active_days'])
@@ -490,7 +490,7 @@ elif page == PAGE_POLICY:
                 help='Liquidity released via the dynamic buffer, as a share of available routing liquidity in all scenario\'s combined.')
     c[1].metric('Central-bank injection as % of available overall routing liquidity', f"{inject_pct:.2f}%",
                 help='Backstop injection, as a share of available routing liquidity in all scenario\'s combined.')
-    c[2].metric('Total support as % of available overall routing liquidity', f"{support_pct:.1f}%",
+    c[2].metric('Total support as % of available overall routing liquidity', f"{support_pct:.2f}%",
                 help='Buffer release + injection combined, as a share of available routing liquidity in all scenario\'s combined.')
 
     st.caption('All figures are expressed relative to total routing liquidity available (the 100% baseline), '
