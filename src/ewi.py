@@ -85,7 +85,7 @@ class EWIConfig:
     """
 
     target_recall: float = 0.30
-    target_precision: float = 0.25
+    target_precision: float = 0.20
     lead_time: int = 5
     seed: int = 42
 
