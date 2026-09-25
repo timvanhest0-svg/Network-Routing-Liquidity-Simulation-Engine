@@ -111,8 +111,8 @@ class SimulationConfig:
 
     # User-facing parameters on the original gamma scale.
     # Defaults use all 750 positive observations in the 2010-2014 window.
-    mu: float = 1.15732
-    sigma: float = 0.5381096234868743
+    mu: float = 1.1573
+    sigma: float = 0.5381
 
     # Behavioural scenario assumption, not an econometric estimate.
     # Set to 0 for no memory; examples: 10 for moderate and 20 for longer memory.
