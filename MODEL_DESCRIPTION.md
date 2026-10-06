@@ -147,7 +147,7 @@ $$
 The direct routing multiplier is the expected degree:
 
 $$
-LM(\gamma) = \mathbb{E}[k] = \sum_{k=1}^{N-1}k\,p_k(\gamma).
+LM(\gamma) = \mathbb{E}[k] = \sum_{k=1}^{N-1}k\p_k(\gamma).
 $$
 
 The indirect routing multiplier is:
