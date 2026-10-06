@@ -566,14 +566,13 @@ else:
         threshold = float(np.asarray(sim['risk_threshold']).item())
     except Exception:
         threshold = float(sim['risk_threshold'])
-
-    f1 = routing_paths_figure(sim['direct_liquidity'], sim['indirect_liquidity'], threshold, 0, n.investment)
-    f2 = all_simulation_paths_figure(sim['direct_liquidity'], sim['indirect_liquidity'], threshold, n.investment,
+    f1 = multiplier_distribution_figure(sim['gamma'], sim['direct_lm'], sim['indirect_lm'], s.q)
+    f2 = routing_paths_figure(sim['direct_liquidity'], sim['indirect_liquidity'], threshold, 0, n.investment)
+    f3 = all_simulation_paths_figure(sim['direct_liquidity'], sim['indirect_liquidity'], threshold, n.investment,
                                      None if n.scenarios <= 1000 else 1000)
-    f3 = policy_comparison_figure(df, total_available=total_available)
-    f4 = multiplier_distribution_figure(sim['gamma'], sim['direct_lm'], sim['indirect_lm'], s.q)
-    figs = {'01_selected_scenario.png': f1, '02_all_simulations.png': f2,
-            '03_mitigation_comparison.png': f3, '04_network_state_distributions.png': f4}
+    f4 = policy_comparison_figure(df, total_available=total_available)
+    
+    figs = {'Figure_1_gamma_LM_distributions.png': f1, 'Figure_2_scenario_path.png': f2, 'Figure_3_all_simulations.png': f3, 'Figure_4_mitigation_comparison.png': f4}
 
     settings = pd.DataFrame({
         'Setting': list(n.__dict__) + list(e.__dict__) + list(p.__dict__) + ['combined_support_pct', 'benchmark_replications'],
