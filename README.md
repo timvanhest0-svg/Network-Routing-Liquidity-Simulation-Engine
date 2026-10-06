@@ -134,12 +134,12 @@ The files produced from the **Downloads** page correspond directly to figures
 reported in Chapter 8 of the thesis, which allows any exported output to be
 audited against the manuscript:
 
-| Export file | Thesis figure |
+| Export file | Working paper figure | Thesis figure |
 |---|---|
-| `01_selected_scenario` | Figure 8.2 |
-| `02_all_simulations` | Figure 8.3 |
-| `03_mitigation_comparison` | Figure 8.4 |
-| `04_network_state_distributions` | Figure 8.1 |
+| `01_selected_scenario`| Figure 1 | Figure 8.1 |
+| `02_all_simulations` | Figure 2 | Figure 8.2 |
+| `03_mitigation_comparison` | Figure 3| Figure 8.3 |
+| `04_network_state_distributions`| Figure 4 | Figure 8.4 |
 
 ## Policy comparison
 
