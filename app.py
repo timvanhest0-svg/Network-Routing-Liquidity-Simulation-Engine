@@ -586,7 +586,6 @@ else:
 
     a, b = st.columns(2)
     a.download_button('Download all PNG figures', png_zip_bytes(figs), 'network_routing_figures_png.zip', 'application/zip', use_container_width=True)
-    a.download_button('Download comparison PNG', figure_to_png_bytes(f3), 'mitigation_comparison.png', 'image/png', use_container_width=True)
     b.download_button('Download Excel results', tables_to_excel_bytes(sheets), 'network_routing_results.xlsx',
                       'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', use_container_width=True)
-    b.download_button('Download comparison CSV', df.to_csv(index=False).encode(), 'mitigation_comparison.csv', 'text/csv', use_container_width=True)
+  
