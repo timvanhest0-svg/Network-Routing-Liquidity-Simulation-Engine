@@ -137,7 +137,7 @@ audited against the manuscript:
 | Export file | Working paper figure | Thesis figure |
 |---|---|---|
 | `Figure_1_multiplier_distribution_figure.png`| Figure 1 | Figure 8.1 |
-| `Figure_2_routing_paths_figure.png'` | Figure 2 | Figure 8.2 |
+| `Figure_2_routing_paths_figure.png` | Figure 2 | Figure 8.2 |
 | `Figure_3_all_simulation_paths.png` | Figure 3| Figure 8.3 |
 | `Figure_4_policy_comparison.png`| Figure 4 | Figure 8.4 |
 
