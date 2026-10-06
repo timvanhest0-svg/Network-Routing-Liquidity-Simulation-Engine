@@ -572,7 +572,7 @@ else:
                                      None if n.scenarios <= 1000 else 1000)
     f4 = policy_comparison_figure(df, total_available=total_available)
     
-    figs = {'Figure_1_gamma_LM_distributions.png': f1, 'Figure_2_scenario_path.png': f2, 'Figure_3_all_simulations.png': f3, 'Figure_4_mitigation_comparison.png': f4}
+    figs = {'Figure_1_multiplier_distribution_figure.png': f1, 'Figure_2_routing_paths_figure.png': f2, 'Figure_3_all_simulation_paths.png': f3, 'Figure_4_policy_comparison.png': f4}
 
     settings = pd.DataFrame({
         'Setting': list(n.__dict__) + list(e.__dict__) + list(p.__dict__) + ['combined_support_pct', 'benchmark_replications'],
