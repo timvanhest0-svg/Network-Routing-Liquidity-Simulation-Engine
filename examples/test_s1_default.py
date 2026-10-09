@@ -34,6 +34,7 @@ from src.simulation import SimulationConfig, simulate_base_paths
 BENCHMARK_REPLICATIONS = 1000
 BENCHMARK_SEED_OFFSET = 42
 OUTPUT_CSV = Path("s1_smoke_test_comparison.csv")
+CSV_FLOAT_FORMAT = "%.10g"
 
 REQUIRED_POLICY_KEYS = {
     "risk_scenario_rate",
@@ -335,7 +336,14 @@ def main() -> None:
     """Run the smoke test manually and export results with all run settings."""
     comparison, parameters = _run_s1_pipeline()
     audit_table = _comparison_with_parameters(comparison, parameters)
-    audit_table.to_csv(OUTPUT_CSV, index=False, encoding="utf-8")
+    # CODECHECK: round to 10 significant digits so that platform- or NumPy-
+    # dependent noise in the last bits does not change the exported file.
+    audit_table.to_csv(
+        OUTPUT_CSV,
+        index=False,
+        encoding="utf-8",
+        float_format=CSV_FLOAT_FORMAT,
+    )
 
     print("S=1 pipeline smoke test passed.")
     print(f"Audit CSV written to: {OUTPUT_CSV.resolve()}")
