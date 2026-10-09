@@ -1,4 +1,4 @@
-# Network Routing Liquidity Engine
+# Network Routing Liquidity Simulation Engine
 
 > A reproducible Streamlit research application for examining how financial-network structure affects liquidity routing under stress and how alternative intervention strategies change simulated outcomes.
 
