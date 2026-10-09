@@ -196,7 +196,7 @@ def compute(n, e, p, reps):
     rnd = run_random_benchmarks(
         sim['direct_lm'], sim['risk_threshold'], base, n.investment,
         n.buffer_normal_pct, ewi_active, p.combined_support_pct,
-        reps, n.seed + 1000,
+        reps, n.seed + 42,
     )
     return sim, base, diag, em, ex, rnd, cm, cx, om, ox
 
