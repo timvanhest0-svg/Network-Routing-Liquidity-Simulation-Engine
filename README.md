@@ -182,12 +182,10 @@ routing capacity, and others).
 Exports the figures (PNG, zipped) and the settings, diagnostics, and result
 tables (Excel) for the current configuration.
 
-### Exported figures and thesis cross-references
+## Exported figures and cross-references
+The four figures exported from the Downloads page are Figures 1–4 of the working paper Paper on SSRN (https://dx.doi.org/10.2139/ssrn.7570458), which is the citable reference for this repository. They also correspond to Chapter 8 of the thesis Network behavior and liquidity crises. The thesis has not been published yet, so the working paper is currently the only public source of these figures. Thesis figure numbers are provisional and may change before the final version.
 
-The exported figures correspond to Chapter 8 of the thesis, so any output can
-be audited against the manuscript.
-
-| Export file | Working paper figure | Thesis figure |
+| Export file | SSRN Working paper figure | Thesis figure |
 |---|---|---|
 | `Figure_1_multiplier_distribution_figure.png` | Figure 1 | Figure 8.1 |
 | `Figure_2_routing_paths_figure.png` | Figure 2 | Figure 8.2 |
