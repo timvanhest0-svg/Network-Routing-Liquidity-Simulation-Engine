@@ -357,9 +357,10 @@ if page == PAGE_OVERVIEW:
             ],
         }), hide_index=True, use_container_width=True, column_config=_col_cfg)
         st.caption('Buffer release and liquidity injection are two mechanisms that can be used to provide liquidity during times of stress. Practical implementation (timing, sourcing) differs, but the engine treats them as additive and independent for clarity.')
-
-    st.info('**Tip:** start with a single-scenario smoke test (**S = 1**) to check the setup, '
-            'then scale up the scenario count once the parameters look right.', icon='💡')
+        st.info('**Tip:** to verify a local installation, run the S = 1 smoke test from the repository root '
+        '(`python -m pytest examples/test_s1_default.py -v`). In the app, start with a small '
+        'scenario count (for example 100) to check the set-up quickly, then scale up once the '
+        'parameters look right.', icon='💡')
 
 # =============================================================================
 # PAGE 1 — Network simulation and routing paths
