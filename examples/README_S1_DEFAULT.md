@@ -177,3 +177,4 @@ scenarios) for substantive results.
 | Reference check fails (`AssertionError`) | Defaults, logic, or library versions changed. Regenerate the reference as described in section 6. |
 
 For the full model logic, see [`../MODEL_DESCRIPTION.md`](../MODEL_DESCRIPTION.md).
+
