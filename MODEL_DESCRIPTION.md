@@ -1,6 +1,6 @@
 # Model Description
 
-## Network Routing Liquidity Engine
+## Network Routing Liquidity Simulation Engine
 
 This document describes the model as implemented in the source code. It covers
 the research objective, notation, stochastic topology process, liquidity
