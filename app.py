@@ -24,7 +24,6 @@ Pages:
   5. Downloads - Figures and results.
 """
 from __future__ import annotations
-from email.policy import default
 import os
 import numpy as np, pandas as pd, streamlit as st
 import matplotlib
