@@ -18,7 +18,7 @@ channels: a dynamic buffer release and a central-bank injection.
 Pages:
   0. Overview — objective and how to read the engine.
   1. Network simulation and routing paths — realized gamma and multiplier distributions, single- and all-scenario paths.
-  2. Risk metrics and EWI settings - design and evaluation.
+  2. EWI settings and evaluation- design and evaluation.
   3. Mitigation results — random vs. EWI-triggered support at equal volume.
   4. Definitions - Glossary of terms.
   5. Downloads - Figures and results.
@@ -87,7 +87,7 @@ for k, v in D.items():
 # --- Navigation --------------------------------------------------------------
 PAGE_OVERVIEW    = 'Overview'
 PAGE_NETWORK     = 'Network simulation and routing paths'
-PAGE_EWI         = 'Risk metrics and EWI settings'
+PAGE_EWI         = 'EWI settings and evaluation'
 PAGE_POLICY      = 'Mitigation results'
 PAGE_DEFINITIONS = 'Model Definitions - Glossary of terms'
 PAGE_DOWNLOADS   = 'Downloads - Figures and results'
