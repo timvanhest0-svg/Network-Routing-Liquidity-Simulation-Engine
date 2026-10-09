@@ -183,7 +183,7 @@ Exports the figures (PNG, zipped) and the settings, diagnostics, and result
 tables (Excel) for the current configuration.
 
 ## Exported figures and cross-references
-The four figures exported from the Downloads page are Figures 1–4 of the [working paper on SSRN](https://doi.org/10.2139/ssrn.7570458) with tittle: *Network Simulation Engine*, which is the citable reference for this repository. They also correspond to Chapter 8 of the thesis Network behavior and liquidity crises. The thesis has not been published yet, so the working paper is currently the only public source of these figures. Thesis figure numbers are provisional and may change before the final version.
+The four figures exported from the Downloads page are Figures 1–4 of the [working paper on SSRN](https://doi.org/10.2139/ssrn.7570458) with title: *A Network Simulation Engine for Systemic Liquidity Risk*, which is the citable reference for this repository. They also correspond to Chapter 8 of the thesis Network behavior and liquidity crises. The thesis has not been published yet, so the working paper is currently the only public source of these figures. Thesis figure numbers are provisional and may change before the final version.
 
 | Export file | SSRN Working paper figure | Thesis figure |
 |---|---|---|
@@ -248,9 +248,6 @@ assumptions.
 - The S = 1 smoke test exercises the integrated pipeline, and the audit CSV
   records the settings and realized diagnostics for every strategy row.
 - Application figures, diagnostics, settings, and tables can be exported.
-
-The smoke test was run successfully with Python 3.12.14, streamlit 1.53.1,
-numpy 1.26.4, pandas 2.2.2, matplotlib 3.8.4, openpyxl 3.1.5, and pytest 9.1.1.
 
 ## Citation
 
