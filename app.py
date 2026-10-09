@@ -30,7 +30,6 @@ import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from src.simulation import SimulationConfig, simulate_base_paths
-from src.topology import make_multiplier_grids
 from src.ewi import EWIConfig, create_ewi
 from src.policy import (
     PolicyConfig,
@@ -44,7 +43,7 @@ from src.policy import (
 from src.metrics import evaluate_liquidity
 from src.plotting import (routing_paths_figure, all_simulation_paths_figure, multiplier_distribution_figure)
 from src.comparison import (build_policy_comparison, policy_comparison_figure,
-                            figure_to_png_bytes, png_zip_bytes, tables_to_excel_bytes)
+                            png_zip_bytes, tables_to_excel_bytes)
 from src.definitions import glossary_dataframe
 
 st.set_page_config(page_title='Network Routing Liquidity Engine', layout='wide')
@@ -54,7 +53,7 @@ diag = {}
 # runs if the asset is missing.
 _LOGO = os.path.join(os.path.dirname(__file__), 'assets', 'NetworkSimulationEngineLogo.png')
 if os.path.exists(_LOGO):
-    st.sidebar.image(_LOGO, use_container_width=True)
+    st.sidebar.image(_LOGO)
 title = 'Network Routing Liquidity Engine'; st.title(title)
 st.caption('A simulation-based framework for network liquidity-risk assessment and mitigation')
 
@@ -135,8 +134,8 @@ elif page == PAGE_POLICY:
     s.delay = st.sidebar.slider('Support-start delay (days)', 1, 20, int(s.delay), key='policy_start_delay', help='Delay before support measures are initiated.')
     s.duration = st.sidebar.slider('Number of support days', 1, 30, int(s.duration), key='policy_support_days', help='Duration of the support period.')
     # Two separate, economically additive support channels.
-    s.buffer_release = st.sidebar.slider('Buffer release on support days (%)', 0, int(s.buffer), 5, 5,key='policy_buffer_release', help='Percentage of the buffer to release during the support period.')
-    s.injection = st.sidebar.slider('Central-bank injection (%)', 0, 50, 5, 5, key='policy_injection', help='Percentage of liquidity to inject from the central bank.')
+    s.buffer_release = st.sidebar.slider('Buffer release on support days (%)', 0, int(s.buffer), int(s.buffer_release), 5,key='policy_buffer_release', help='Percentage of the buffer to release during the support period.')
+    s.injection = st.sidebar.slider('Central-bank injection (%)', 0, 50, int(s.injection), 5, key='policy_injection', help='Percentage of liquidity to inject from the central bank.')
     st.sidebar.caption(f'Combined liquidity support level: {s.buffer_release + s.injection:.0f}%')
 
 
