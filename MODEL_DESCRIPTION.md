@@ -62,8 +62,8 @@ liquidity injections affect simulated routing-capacity shortfalls.
 | Normal buffer | `buffer_normal_pct` | 40.0 | Percentage of the investment base unavailable for normal routing. |
 | Risk quantile | `liquidity_risk_q` | 5.0 | Lower-tail percentile used to define the risk threshold. |
 | Random seed | `seed` | 42 | Seed controlling reproducible simulation draws. |
-| Gamma mean | `mu` | 1.15732 | Requested stationary arithmetic mean of $\gamma$. |
-| Gamma standard deviation | `sigma` | 0.53811 | Requested stationary standard deviation of $\gamma$. |
+| Gamma mean | `mu` | 1.1573 | Requested stationary arithmetic mean of $\gamma$. |
+| Gamma standard deviation | `sigma` | 0.5381 | Requested stationary standard deviation of $\gamma$. |
 | Memory half-life | `halftime` | 10 | Assumed half-life of a log-gamma deviation from the mean, in trading days. |
 
 ### 3.2 EWI settings
