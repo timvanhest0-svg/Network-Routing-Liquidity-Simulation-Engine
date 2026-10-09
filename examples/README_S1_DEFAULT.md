@@ -25,7 +25,7 @@ shape, indexing, broadcasting, or missing-field errors.
 
 ```bash
 python -m pytest examples/test_s1_default.py -v      # 1. run the test
-python -m examples.test_s1_default                    # 2. write the audit CSV
+python -m examples.test_s1_default                   # 2. write the audit CSV
 ```
 
 Step 3 compares the fresh CSV with the committed reference (see
