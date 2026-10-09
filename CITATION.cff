@@ -1,7 +1,7 @@
 cff-version: 1.2.0
 message: "If you use this software, please cite it as below. The accompanying working paper is listed under references."
 type: software
-title: "Network Routing Liquidity Engine"
+title: "Network Routing Liquidity Simulation Engine"
 abstract: "A Streamlit simulation engine for network-driven liquidity-risk analysis, performance-controlled early-warning indicators, and equal-volume comparison of random versus EWI-triggered liquidity support."
 authors:
   - family-names: "van Hest"
