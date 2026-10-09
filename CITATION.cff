@@ -1,16 +1,36 @@
 cff-version: 1.2.0
-message: "If you use this software, please cite it as below."
-title: "Network Routing Liquidity Risk Simulation Engine"
+message: "If you use this software, please cite it as below. The accompanying working paper is listed under references."
+type: software
+title: "Network Routing Liquidity Engine"
 abstract: "A Streamlit simulation engine for network-driven liquidity-risk analysis, performance-controlled early-warning indicators, and equal-volume comparison of random versus EWI-triggered liquidity support."
 authors:
   - family-names: "van Hest"
     given-names: "Tim"
-version: "1.0.0"
-date-released: "2026-07-26"
+    affiliation: "University of Twente"
+    orcid: "https://orcid.org/0009-0009-6610-5730"
+version: "1.0"                
+date-released: "2026-10-06"      
+doi: "10.5281/zenodo.23187493"   
 license: "Apache-2.0"
+url: "https://network-routing-liquidity-simulation-engine.streamlit.app/"
+repository-code: "https://github.com/timvanhest0-svg/Network-Routing-Liquidity-Simulation-Engine"
 keywords:
   - systemic liquidity risk
   - financial networks
   - early-warning indicators
   - routing capacity
   - Monte Carlo simulation
+  - U.S. Treasury market
+references:
+  - type: report
+    authors:
+      - family-names: "van Hest"
+        given-names: "Tim"
+        affiliation: "University of Twente"
+    title: "A Network Simulation Engine for Systemic Liquidity Risk: Model Specification and Policy Evaluation"
+    year: 2026
+    doi: "10.2139/ssrn.7570458"
+    publisher:
+      name: "SSRN"
+    url: "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7570458"
+    notes: "Working paper describing the model implemented in this repository. Figures 1-4 of the working paper correspond to the figures exported by the application."
