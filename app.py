@@ -1,5 +1,5 @@
 """
-Network Routing Liquidity Engine — Streamlit application.
+Network Routing Liquidity Simulation Engine — Streamlit application.
 
 A simulation-based framework for liquidity-risk assessment and mitigation on a
 preferential-attachment style network. The engine operationalizes the
