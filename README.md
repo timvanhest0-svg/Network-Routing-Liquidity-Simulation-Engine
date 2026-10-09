@@ -2,10 +2,26 @@
 
 > A reproducible Streamlit research application for examining how financial-network structure affects liquidity routing under stress and how alternative intervention strategies change simulated outcomes.
 
-![Python](https://img.shields.io/badge/python-3.10%2B-blue)
-![Streamlit](https://img.shields.io/badge/built%20with-Streamlit-ff4b4b)
-![License](https://img.shields.io/badge/license-Apache--2.0-green)
-![Status](https://img.shields.io/badge/status-research--prototype-orange)
+[![Python](https://img.shields.io/badge/python-3.10%2B-blue)](https://www.python.org/)
+[![Streamlit](https://img.shields.io/badge/built%20with-Streamlit-ff4b4b)](https://streamlit.io/)
+[![License](https://img.shields.io/badge/license-Apache--2.0-green)](LICENSE)
+[![Status](https://img.shields.io/badge/status-research--prototype-orange)](#scope-and-limitations)
+
+**Live application:** [network-routing-liquidity-simulation-engine.streamlit.app](https://network-routing-liquidity-simulation-engine.streamlit.app/)
+
+## Contents
+
+- [Purpose](#purpose)
+- [Key features](#key-features)
+- [Quick start](#quick-start)
+- [Verify the installation (S = 1 smoke test)](#verify-the-installation-s--1-smoke-test)
+- [Default parameters](#default-parameters)
+- [Application pages](#application-pages)
+- [Policy comparison](#policy-comparison)
+- [Repository structure](#repository-structure)
+- [Scope and limitations](#scope-and-limitations)
+- [Reproducibility](#reproducibility)
+- [Citation](#citation) · [License](#license) · [Contributing](#contributing)
 
 ## Purpose
 
@@ -47,184 +63,152 @@ simulated liquidity shortfalls.
 - **Auditable outputs:** exports figures, tables, settings, diagnostics, and the
   parameters used to generate the results.
 
+## Quick start
+
+Requires Python 3.10 or later. Run all commands from the repository root.
+
+```bash
+# 1. Create and activate a virtual environment
+python -m venv .venv
+source .venv/bin/activate          # macOS / Linux
+.venv\Scripts\activate             # Windows (PowerShell)
+
+# 2. Install dependencies
+python -m pip install -r requirements.txt
+
+# 3. Launch the application
+streamlit run app.py
+```
+
+The application opens in your browser (by default at `http://localhost:8501`).
+Its default inputs reproduce the Chapter 8 simulation of the thesis.
+
+## Verify the installation (S = 1 smoke test)
+
+The repository uses a single-scenario (`S = 1`) integration smoke test instead
+of a separate test suite. It checks that the smallest supported scenario
+dimension passes through the simulation, EWI, policy, randomized benchmark, and
+five-strategy comparison pipeline without runtime or shape errors.
+
+| Step | Command | Expected result |
+|---|---|---|
+| Run the test | `python -m pytest examples/test_s1_default.py -v` | `1 passed` (a few seconds) |
+| Create the audit CSV | `python -m examples.test_s1_default` | `S=1 pipeline smoke test passed.` and `s1_smoke_test_comparison.csv` in the working directory |
+
+The CSV contains one row per strategy, with the simulation, EWI, policy,
+benchmark, and realized-run parameters repeated on every row. It is an audit
+artefact: the pytest assertions, not the CSV, determine whether the test
+passes. The test checks shapes, required result fields, finite values, and the
+five-row comparison table. It does **not** validate economic calibration,
+statistical inference, or Monte Carlo convergence.
+
+See [`examples/README_S1_DEFAULT.md`](examples/README_S1_DEFAULT.md) for the
+exported fields, interpretation, and common failures.
+
+## Default parameters
+
+Defaults come from the configuration objects in `src/` and are the values used
+in the Chapter 8 simulation. See [`MODEL_DESCRIPTION.md`](MODEL_DESCRIPTION.md)
+for definitions.
+
+| Group | Parameter | Default |
+|---|---|---|
+| Simulation | Network size (`n_nodes`) | 24 |
+| | Scenarios | 1,000 (1 in the smoke test) |
+| | Trading days | 200 |
+| | Investment base | 100 |
+| | Normal liquidity buffer | 40 % |
+| | Risk quantile (`liquidity_risk_q`) | 5 % |
+| | Tail exponent mean (μ) / s.d. (σ) | 1.1573 / 0.5381 |
+| | Half-life of topology shocks | 10 trading days |
+| | Random seed | 42 |
+| EWI | Target recall / precision | 0.30 / 0.20 |
+| | Lead time | 5 trading days |
+| Policy | Buffer release / central-bank injection | 5 % / 5 % |
+| | Support days / start delay | 10 / 5 |
+| Benchmark (smoke test) | Replications / seed | 1,000 / simulation seed + 42 |
+
 ## Application pages
 
-0. **Overview** explains the policy question, model scope, and configuration.
-1. **Network simulation and routing paths** presents simulated network states,
-   multiplier distributions, and individual and ensemble paths.
-2. **Risk metrics and EWI settings** reports baseline risk outcomes and the
-   realized performance of the warning signal.
-3. **Mitigation results** compares the five policy strategies.
-4. **Model definitions** provides a glossary of the main concepts.
-5. **Downloads** exports figures, settings, diagnostics, and result tables.
-
-## Application walkthrough
-
-A live version of the application is deployed at
-[network-routing-liquidity-simulation-engine.streamlit.app](https://network-routing-liquidity-simulation-engine.streamlit.app/).
-When `app.py` is run, a Streamlit application starts with a **navigation panel
-on the left-hand side** listing the six application pages described above,
-numbered 0–5. The same left-hand panel also hosts the **simulation input
-parameters**, which are pre-populated with the default values used in the
-Chapter 8 simulation of the thesis, so the deployed app reproduces the thesis
-results out of the box and can then be re-parameterized for further
-exploration. The screenshots below (top of each page) can be used to verify
+The left-hand panel lists the six pages (numbered 0–5) and hosts the input
+parameters. The screenshots show the top of each page and can be used to check
 that a local or redeployed instance is set up correctly.
 
 ### 0. Overview
 
-Explains the policy question addressed by the engine, the scope of the model, and how to read the remaining pages
-(0. Overview, 1. Network simulation and routing paths, 2. EWI settings and evaluation, 
-3. Mitigation results, 4. Model definitions, 5. Downloads).
+Explains the policy question, the model scope, and how to read the remaining
+pages.
 
-![Overviewl-0-overview.png](assets/panel-0-overview.png)
+![Overview page](assets/panel-0-overview.png)
 
 ### 1. Network simulation and routing paths
 
-Takes the network simulation parameters entered in the left-hand panel
-(network size, simulation scenarios, trading days, random seed, investment
-base) and renders the resulting distribution of the tail exponent (γ) together
-with the direct and indirect routing multipliers it implies, shown both for a
-single realized network state and across all simulated scenario-days.
+Takes the network simulation inputs (network size, scenarios, trading days,
+random seed, investment base) and shows the distribution of the tail exponent
+(γ) and the direct and indirect routing multipliers it implies, for a single
+realized network state and across all simulated scenario-days.
 
-![Overviewl-0-overview.png](assets/panel-1-network-simulation.png)
+![Network simulation page](assets/panel-1-network-simulation.png)
 
+### 2. EWI settings and evaluation
 
-### 2. Risk metrics and EWI settings
+Takes the early-warning indicator (EWI) inputs (target recall, target precision,
+fixed lead time) and reports the baseline liquidity-risk metrics (risk-scenario
+rate, risk-day rate, relative shortfall) together with the configured versus
+realized recall and precision of the warning signal.
 
-Takes the early-warning indicator (EWI) settings (target recall, target
-precision, fixed EWI lead time) entered in the left-hand panel and reports the
-baseline liquidity-risk evaluation metrics (baseline risk-scenario rate,
-baseline risk-day rate, baseline relative shortfall) together with the
-configured versus realized recall and precision of the warning signal.
-
-![Overviewl-0-overview.png](assets/panel-2-risk-metrics-ewi.png)
-
+![Risk metrics and EWI page](assets/panel-2-risk-metrics-ewi.png)
 
 ### 3. Mitigation results
 
-Compares the simulated outcomes of the five policy strategies (no
-intervention, reactive countercyclical support, EWI-targeted support,
-randomized timing, and the perfect-information oracle) for the parameter
-configuration selected in the left-hand panel, reporting both the
-routing-capacity shortfall reduction (e.g., EWI-triggered support versus
-randomized-timing support at equal spend) and the support volume used by each
-strategy (buffer release, central-bank injection, and total support as a
-percentage of available routing liquidity).
+Compares the five policy strategies for the selected configuration. It reports
+the routing-capacity shortfall reduction (for example, EWI-triggered versus
+randomized-timing support at equal spend) and the support volume each strategy
+uses (buffer release, central-bank injection, and total support as a percentage
+of available routing liquidity).
 
-![Overviewl-0-overview.png](assets/panel-3-mitigation-results.png)
+![Mitigation results page](assets/panel-3-mitigation-results.png)
 
 ### 4. Model definitions
 
-Provides a searchable glossary of all model concepts and formulas (tail
-exponent, network size, direct/indirect liquidity multipliers, network-adjusted
-routing capacity, etc.) for easy reference while navigating the other pages.
+A searchable glossary of the model concepts and formulas (tail exponent,
+network size, direct and indirect liquidity multipliers, network-adjusted
+routing capacity, and others).
 
-![Overviewl-0-overview.png](assets/panel-4-model-definitions.png)
+![Model definitions page](assets/panel-4-model-definitions.png)
 
 ### 5. Downloads
 
-Lets the user export the figures, settings, diagnostics, and result tables
-generated by the current configuration (download all PNG figures and Excel
-results).
+Exports the figures (PNG, zipped) and the settings, diagnostics, and result
+tables (Excel) for the current configuration.
 
 ### Exported figures and thesis cross-references
 
-The files produced from the **Downloads** page correspond directly to figures
-reported in Chapter 8 of the thesis, which allows any exported output to be
-audited against the manuscript:
+The exported figures correspond to Chapter 8 of the thesis, so any output can
+be audited against the manuscript.
 
 | Export file | Working paper figure | Thesis figure |
 |---|---|---|
-| `Figure_1_multiplier_distribution_figure.png`| Figure 1 | Figure 8.1 |
+| `Figure_1_multiplier_distribution_figure.png` | Figure 1 | Figure 8.1 |
 | `Figure_2_routing_paths_figure.png` | Figure 2 | Figure 8.2 |
-| `Figure_3_all_simulation_paths.png` | Figure 3| Figure 8.3 |
-| `Figure_4_policy_comparison.png`| Figure 4 | Figure 8.4 |
+| `Figure_3_all_simulation_paths.png` | Figure 3 | Figure 8.3 |
+| `Figure_4_policy_comparison.png` | Figure 4 | Figure 8.4 |
 
 ## Policy comparison
 
-The comparison is designed to separate intervention timing from intervention
-volume:
+The comparison separates intervention timing from intervention volume:
 
-- **No intervention** provides the baseline.
-- **Reactive countercyclical intervention** responds after a realized risk day.
-- **EWI-targeted intervention** responds to an imperfect advance-warning signal.
-- **Randomized timing** reallocates the EWI strategy's realized support-day
-  budget to random dates.
-- **Perfect-information oracle** allocates the same support-day budget to the
-  weakest baseline observations using information that would not be available
-  in practice.
+| Strategy | Rule | Volume |
+|---|---|---|
+| No intervention | Baseline | None |
+| Reactive countercyclical | Responds after a realized risk day | Event-driven; may differ |
+| EWI-targeted | Responds to an imperfect advance-warning signal | Set by the signal |
+| Randomized timing | Reallocates the EWI strategy's support-day budget to random dates | Equal to EWI |
+| Perfect-information oracle | Allocates the same budget to the weakest baseline observations (infeasible in practice) | Equal to EWI |
 
-Randomized timing and the oracle are equal-volume timing controls. The reactive
-countercyclical strategy is event-driven and may therefore use a different
-realized support volume. The comparison reports both risk outcomes and support
-volume so these differences remain visible.
-
-For the formal model, equations, parameter definitions, and implementation
-logic, see [`MODEL_DESCRIPTION.md`](MODEL_DESCRIPTION.md).
-
-## Installation
-
-Create a virtual environment:
-
-```bash
-python -m venv .venv
-```
-
-Activate it on Windows:
-
-```powershell
-.venv\Scripts\activate
-```
-
-Activate it on macOS or Linux:
-
-```bash
-source .venv/bin/activate
-```
-
-Install the dependencies:
-
-```bash
-python -m pip install -r requirements.txt
-```
-
-Python 3.10 or later is recommended.
-
-## Quick start
-
-From the repository root, run:
-
-```bash
-streamlit run app.py
-```
-
-## S = 1 integration smoke test
-
-The repository uses a single-scenario integration smoke test instead of a
-separate test suite. It checks that the smallest supported scenario dimension
-passes through the simulation, EWI, policy, randomized benchmark, and
-five-strategy comparison pipeline without runtime or shape errors.
-
-Run it with pytest:
-
-```bash
-python -m pytest examples/test_s1_default.py -v
-```
-
-Run it as a standalone reproducibility example:
-
-```bash
-python -m examples.test_s1_default
-```
-
-The standalone run creates `s1_smoke_test_comparison.csv`. The export contains
-one row per strategy and includes the simulation, EWI, policy, benchmark, and
-realized-run parameters used to generate the results.
-
-See [`examples/README_S1_DEFAULT.md`](examples/README_S1_DEFAULT.md) for the
-scope, execution instructions, exported fields, and interpretation of the
-smoke test.
+Randomized timing and the oracle are equal-volume timing controls. The
+reactive strategy may use a different realized support volume, so the
+comparison reports risk outcomes and support volume side by side.
 
 ## Repository structure
 
@@ -236,12 +220,11 @@ smoke test.
 | `src/metrics.py` | Liquidity-risk rates and shortfall measures. |
 | `src/ewi.py` | Performance-controlled warning-signal emulator and diagnostics. |
 | `src/policy.py` | Activation masks, support application, randomized benchmark, and oracle. |
-| `src/comparison.py` | Five-strategy result normalization, comparison table, figure, and export helpers. |
+| `src/comparison.py` | Five-strategy comparison table, figure, and export helpers. |
 | `src/plotting.py` | Network-state and routing-capacity figures. |
 | `src/definitions.py` | Application glossary. |
-| `assets/NetworkSimulationEngineLogo` | Logo. |
-| `assets/screenshots/` | README walkthrough screenshots. |
-| `examples/test_s1_default.py` | S = 1 integration smoke test and auditable CSV export. |
+| `assets/` | Logo (`NetworkSimulationEngineLogo.png`) and README screenshots (`panel-*.png`). |
+| `examples/test_s1_default.py` | S = 1 integration smoke test and audit CSV export. |
 | `examples/README_S1_DEFAULT.md` | Smoke-test instructions and interpretation. |
 | `MODEL_DESCRIPTION.md` | Formal model, equations, assumptions, and implementation sequence. |
 | `requirements.txt` | Python dependencies. |
@@ -260,12 +243,16 @@ assumptions.
 
 ## Reproducibility
 
-- All stochastic components use explicit seeds.
+- All stochastic components use explicit seeds; the randomized benchmark uses a
+  separately recorded seed derived from the simulation seed.
 - Model settings are stored in configuration objects.
-- Dependencies are recorded in `requirements.txt`.
-- The S = 1 smoke test exercises the integrated computational pipeline.
-- The smoke-test CSV records the settings associated with every strategy row.
+- Dependencies are listed in `requirements.txt`.
+- The S = 1 smoke test exercises the integrated pipeline, and the audit CSV
+  records the settings and realized diagnostics for every strategy row.
 - Application figures, diagnostics, settings, and tables can be exported.
+
+The smoke test was run successfully with Python 3.12.14, streamlit 1.53.1,
+numpy 1.26.4, pandas 2.2.2, matplotlib 3.8.4, openpyxl 3.1.5, and pytest 9.1.1.
 
 ## Citation
 
