@@ -48,9 +48,16 @@ python -m pytest examples/test_s1_default.py --collect-only -v
 python -m examples.test_s1_default
 ```
 
-This prints `S=1 pipeline smoke test passed.`, the output path, and the full
-table, and writes `s1_smoke_test_comparison.csv` to the current working
-directory. An existing file is overwritten.
+This prints S=1 pipeline smoke test passed., the output path, and the full table, and writes s1_smoke_test_comparison.csv to the current working directory. An existing file is overwritten.
+
+Reference output for comparison
+A reference copy of this CSV from an actual run with the default settings is logged in the examples/ folder as s1_smoke_test_default_comparison.csv. Compare your fresh output with it to confirm that your installation reproduces the same results:
+
+# macOS / Linux
+diff s1_smoke_test_comparison.csv examples/s1_smoke_test_default_comparison.csv
+
+# Windows (PowerShell)
+fc s1_smoke_test_comparison.csv examples\s1_smoke_test_default_comparison.csv
 
 ### Structure of the CSV
 
